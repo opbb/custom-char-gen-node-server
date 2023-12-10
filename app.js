@@ -4,6 +4,8 @@ import session from "express-session";
 import cors from "cors";
 import mongoose from "mongoose";
 import TemplateRoutes from "./templates/routes.js";
+import CharacterRoutes from "./characters/routes.js";
+import SongRoutes from "./songs/routes.js";
 mongoose.connect(
   process.env.DB_CONNECTION_STRING ||
     "mongodb://127.0.0.1:27017/custom-char-gen"
@@ -33,5 +35,7 @@ app.use(express.json());
 
 // Put routes here
 TemplateRoutes(app);
+CharacterRoutes(app);
+SongRoutes(app);
 
 app.listen(process.env.PORT || 4000);

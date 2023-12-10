@@ -9,6 +9,11 @@ function TemplateRoutes(app) {
     const { searchQuery } = req.params;
     // TODO
   });
+  app.get("/api/templates/featured", async (req, res) => {
+    const { ownerID } = req.params;
+    const templates = await dao.findAllTemplates();
+    res.send(templates);
+  });
   app.get("/api/templates/:ownerID", async (req, res) => {
     const { ownerID } = req.params;
     const templates = await dao.findTemplatesByOwnerID(ownerID);

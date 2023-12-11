@@ -7,6 +7,7 @@ import TemplateRoutes from "./templates/routes.js";
 import CharacterRoutes from "./characters/routes.js";
 import SongRoutes from "./songs/routes.js";
 import UserRoutes from "./users/routes.js";
+import RandomOptionsRoutes from "./randomOptions/routes.js";
 mongoose.connect(
   process.env.DB_CONNECTION_STRING ||
     "mongodb://127.0.0.1:27017/custom-char-gen"
@@ -38,5 +39,6 @@ TemplateRoutes(app);
 CharacterRoutes(app);
 SongRoutes(app);
 UserRoutes(app);
+RandomOptionsRoutes(app);
 
 app.listen(process.env.PORT || 4000);

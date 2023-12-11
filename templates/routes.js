@@ -1,4 +1,6 @@
 import * as dao from "./dao.js";
+import { createCharacter } from "../characters/dao.js";
+import { findRandomOptionsById } from "../randomOptions/dao.js";
 function TemplateRoutes(app) {
   app.get("/api/template/:templateID", async (req, res) => {
     const { templateID } = req.params;
@@ -24,9 +26,53 @@ function TemplateRoutes(app) {
       ...req.body,
       ownerID: ownerID,
     };
-    delete newTemplate._id;
-    const createdTemplate = await dao.createTemplate(newTemplate);
-    res.send(createdTemplate);
+  });
+  app.post("/api/template/:templateID/:ownerID/generate", async (req, res) => {
+    const { templateID, ownerID } = req.params;
+    const template = await dao.findTemplateById(templateID);
+    const generatableTraits = template.traits.filter(
+      (trait) =>
+        trait.randomOptionsID !== null && trait.randomOptionsID !== undefined
+    );
+    const randomOptionsPromises = generatableTraits.map((trait) =>
+      findRandomOptionsById(trait.randomOptionsID)
+    );
+    const allRandomOptions = await Promise.all(randomOptionsPromises);
+    const generatedTraits = generatableTraits.map((trait, index) => {
+      const randomOptions = allRandomOptions[index];
+      // TODO: Turn this into a switch case
+      let traitValue;
+      if (randomOptions.type === "list") {
+        traitValue =
+          randomOptions.optionsList[
+            Math.floor(Math.random() * randomOptions.optionsList.length)
+          ];
+      } else {
+        const start = randomOptions.start || 0;
+        const stop = randomOptions.stop || 0;
+        // const step =
+        //   (randomOptions.step &&
+        //     randomOptions.step !== 0 &&
+        //     randomOptions.step) ||
+        //   1;
+        const min = Math.min(start, stop);
+        const max = Math.max(start, stop);
+        traitValue = Math.round(Math.random() * (max - min) + min);
+      }
+      return {
+        title: trait.title,
+        type: trait.type,
+        value: traitValue,
+      };
+    });
+    const generatedCharacter = {
+      ownerID: ownerID,
+      visibility: "private",
+      traits: generatedTraits,
+    };
+    console.log(generatedCharacter);
+    const createdCharacter = await createCharacter(generatedCharacter);
+    res.send(createdCharacter);
   });
   app.post("/api/template/:ownerID/blank", async (req, res) => {
     const { ownerID } = req.params;
@@ -38,7 +84,6 @@ function TemplateRoutes(app) {
       traits: [],
     };
     const createdTemplate = await dao.createTemplate(newTemplate);
-    console.log(createdTemplate);
     res.send(createdTemplate);
   });
   app.delete("/api/template/:templateID", async (req, res) => {

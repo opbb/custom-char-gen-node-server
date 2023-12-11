@@ -26,6 +26,9 @@ function TemplateRoutes(app) {
       ...req.body,
       ownerID: ownerID,
     };
+    delete newTemplate._id;
+    const createdTemplate = await dao.createTemplate(newTemplate);
+    res.send(createdTemplate);
   });
   app.post("/api/template/:templateID/:ownerID/generate", async (req, res) => {
     const { templateID, ownerID } = req.params;

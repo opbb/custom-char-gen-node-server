@@ -2,15 +2,14 @@ import * as dao from "./dao.js";
 function TemplateRoutes(app) {
   app.get("/api/template/:templateID", async (req, res) => {
     const { templateID } = req.params;
-    const user = await dao.findTemplateById(templateID);
-    res.send(user);
+    const template = await dao.findTemplateById(templateID);
+    res.send(template);
   });
   app.get("/api/templates/search/:searchQuery", async (req, res) => {
     const { searchQuery } = req.params;
     // TODO
   });
   app.get("/api/templates/featured", async (req, res) => {
-    const { ownerID } = req.params;
     const templates = await dao.findAllTemplates();
     res.send(templates);
   });
@@ -25,6 +24,7 @@ function TemplateRoutes(app) {
       ...req.body,
       ownerID: ownerID,
     };
+    delete newTemplate._id;
     const createdTemplate = await dao.createTemplate(newTemplate);
     res.send(createdTemplate);
   });
@@ -36,9 +36,9 @@ function TemplateRoutes(app) {
       title: "",
       description: "",
       traits: [],
-      ownerID: ownerID,
     };
     const createdTemplate = await dao.createTemplate(newTemplate);
+    console.log(createdTemplate);
     res.send(createdTemplate);
   });
   app.delete("/api/template/:templateID", async (req, res) => {

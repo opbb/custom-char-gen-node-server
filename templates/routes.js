@@ -70,7 +70,6 @@ function TemplateRoutes(app) {
       visibility: "private",
       traits: generatedTraits,
     };
-    console.log(generatedCharacter);
     const createdCharacter = await createCharacter(generatedCharacter);
     res.send(createdCharacter);
   });

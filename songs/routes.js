@@ -30,7 +30,7 @@ function SongRoutes(app) {
         }, (expires_in - 5) * 1000); // Convert seconds to miliseconds. Give 5 second's of leway for setTimeout
         return authorization;
       } catch (err) {
-        console.log("ERR GETTING SPOTIFY ACCESS TOKEN", err);
+        console.log("ERR GETTING SPOTIFY ACCESS TOKEN");
       }
     }
   };
@@ -85,7 +85,7 @@ function SongRoutes(app) {
       const { data } = res;
       return cleanTrackData(data);
     } catch (err) {
-      console.log("ERR GETTING SPOTIFY SONG", err);
+      console.log("ERR GETTING SPOTIFY SONG");
     }
   };
 
@@ -107,7 +107,7 @@ function SongRoutes(app) {
       const cleanedTracksData = data.tracks.map(cleanTrackData);
       return cleanedTracksData;
     } catch (err) {
-      console.log("ERR GETTING SPOTIFY SONGS", err);
+      console.log("ERR GETTING SPOTIFY SONGS");
     }
   };
 

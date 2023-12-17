@@ -51,16 +51,26 @@ function TemplateRoutes(app) {
             Math.floor(Math.random() * randomOptions.optionsList.length)
           ];
       } else {
-        const start = randomOptions.start || 0;
-        const stop = randomOptions.stop || 0;
+        console.log(randomOptions);
+        const start =
+          randomOptions.start !== undefined && randomOptions.start !== null
+            ? parseInt(randomOptions.start)
+            : 0;
+        const stop =
+          randomOptions.end !== undefined && randomOptions.end !== null
+            ? parseInt(randomOptions.end)
+            : 0;
         // const step =
         //   (randomOptions.step &&
         //     randomOptions.step !== 0 &&
         //     randomOptions.step) ||
         //   1;
+
         const min = Math.min(start, stop);
         const max = Math.max(start, stop);
-        traitValue = Math.round(Math.random() * (max - min) + min);
+        console.log(`Start: ${start}, Stop: ${stop}, Min: ${min}, Max ${max}`);
+        traitValue = Math.floor(Math.random() * (max - min)) + min;
+        console.log(`Value: ${traitValue}`);
       }
       return {
         title: trait.title,

@@ -16,6 +16,8 @@
   "author": "Oliver Baer-Benson",
   "license": "ISC",
   "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.17.10",
     "axios": "^1.6.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

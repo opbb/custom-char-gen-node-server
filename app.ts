@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import session from "express-session";
 import cors from "cors";
-import mongoose from "mongoose";
+import mongoose, { SessionOption } from "mongoose";
 import TemplateRoutes from "./templates/routes.js";
 import CharacterRoutes from "./characters/routes.js";
 import SongRoutes from "./songs/routes.js";
@@ -13,10 +13,17 @@ mongoose.connect(
     "mongodb://127.0.0.1:27017/custom-char-gen"
 );
 const app = express();
-const sessionOptions = {
-  secret: "any string",
+
+const sessionSecret = process.env.SESSION_SECRET;
+if (sessionSecret === undefined) {
+  throw new Error("Session secret environment variable is undefined.");
+}
+const sessionOptions: session.SessionOptions = {
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: false,
+  proxy: undefined,
+  cookie: undefined,
 };
 if (process.env.NODE_ENV !== "development") {
   sessionOptions.proxy = true;
@@ -34,7 +41,7 @@ app.use(
 );
 app.use(express.json());
 
-// Put routes here
+// Routes
 TemplateRoutes(app);
 CharacterRoutes(app);
 SongRoutes(app);

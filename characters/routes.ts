@@ -1,4 +1,4 @@
-import * as dao from "./dao.js";
+import * as dao from "./dao";
 function CharacterRoutes(app) {
   app.get("/api/character/:characterID", async (req, res) => {
     const { characterID } = req.params;

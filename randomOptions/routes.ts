@@ -1,4 +1,4 @@
-import * as dao from "./dao.js";
+import * as dao from "./dao";
 function RandomOptionsRoutes(app) {
   app.get("/api/randomOptions/:randomOptionsID", async (req, res) => {
     const { randomOptionsID } = req.params;

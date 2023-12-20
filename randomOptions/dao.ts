@@ -1,4 +1,4 @@
-import model from "./model.js";
+import model from "./model";
 export const createRandomOptions = (randomOptions) =>
   model.create(randomOptions);
 export const findAllRandomOptions = () => model.find();

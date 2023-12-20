@@ -1,4 +1,4 @@
-import model from "./model.js";
+import model from "./model";
 export const createTemplate = (template) => model.create(template);
 export const findAllTemplates = () => model.find();
 export const findTemplateById = (templateID) => model.findById(templateID);

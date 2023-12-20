@@ -1,11 +1,20 @@
 import mongoose from "mongoose";
+import { ObjectId } from "../utils";
+export enum UserRole {
+  User = "USER",
+  Admin = "ADMIN",
+}
+export type User = {
+  _id: ObjectId;
+  username: String;
+  email?: String;
+  role: UserRole;
+};
 const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    firstName: String,
     email: String,
-    lastName: String,
     role: {
       type: String,
       enum: ["USER", "ADMIN"],

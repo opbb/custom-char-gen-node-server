@@ -1,4 +1,4 @@
-import model from "./model.js";
+import model from "./model";
 export const createCharacter = (character) => model.create(character);
 export const findAllCharacters = () => model.find();
 export const findCharacterById = (characterID) => model.findById(characterID);

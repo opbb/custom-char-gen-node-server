@@ -6,8 +6,8 @@ export enum UserRole {
 }
 export type User = {
   _id: ObjectId;
-  username: String;
-  email?: String;
+  username: string;
+  email: string | undefined;
   role: UserRole;
 };
 const userSchema = new mongoose.Schema(
@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     email: String,
     role: {
       type: String,
-      enum: ["USER", "ADMIN"],
+      enum: [UserRole.User, UserRole.Admin],
       default: "USER",
     },
   },

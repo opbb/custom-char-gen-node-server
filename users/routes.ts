@@ -157,10 +157,11 @@ function UserRoutes(app: express.Express) {
       password: passwordResult.val,
     };
     const user = await dao.createUser(newUser);
-    const returnedUser = {
+    const email = user.email === null ? undefined : user.email;
+    const returnedUser: User = {
       _id: user._id,
       username: user.username,
-      email: user.email,
+      email: user.email !== null ? user.email : undefined,
       role: user.role,
     };
     req.session.user = returnedUser;
@@ -169,18 +170,36 @@ function UserRoutes(app: express.Express) {
 
   app.post("/api/users/signin", async (req, res) => {
     const { username, password } = req.body;
-    const currentUser = await dao.findUserByCredentials(username, password);
-    req.session["currentUser"] = currentUser;
-    res.status(200).json(currentUser);
+    const userDoc = await dao.findUserByCredentials(username, password);
+    if (userDoc === null) {
+      res.status(404).json({
+        message: `User with the given credentials could not be found.`,
+      });
+      return;
+    }
+    const user: User = {
+      _id: userDoc._id,
+      username: userDoc.username,
+      email: userDoc.email !== null ? userDoc.email : undefined,
+      role: userDoc.role,
+    };
+    req.session.user = user;
+    res.status(200).json(user);
   });
-
   app.post("/api/users/signout", (req, res) => {
-    req.session.destroy();
-    res.json(200);
+    const onDestroy = (err: any) => {
+      if (err !== undefined || err !== null) {
+        console.log("Signout Error: ", err);
+      } else {
+        res.json(200);
+      }
+    };
+    req.session.destroy(onDestroy);
   });
 
+  // Needs authentication
   app.post("/api/users/account", async (req, res) => {
-    res.json(req.session["currentUser"]);
+    res.json(req.session.user);
   });
 }
 export default UserRoutes;

@@ -9,10 +9,11 @@ import CharacterRoutes from "./characters/routes";
 import SongRoutes from "./songs/routes";
 import UserRoutes from "./users/routes";
 import RandomOptionsRoutes from "./randomOptions/routes";
+import { User } from "./users/schema";
 
 declare module "express-session" {
   export interface SessionData {
-    user: { [key: string]: any };
+    user: User;
   }
 }
 
